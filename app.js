@@ -8,6 +8,8 @@ var server = http.createServer(app);
 var db = init_db();
 var io =  socket_io(server);
 
+n_backup = JSON.parse(fs.readFileSync("backups/n.txt"));
+
 app.set("view engine", "ejs");
 app.use(express.urlencoded({extended:false}));
 app.use(express.static("static"));
@@ -22,6 +24,7 @@ app.get("/db", function(req, res) {
 
 io.on("connection", function(socket) {
     console.log("connection");
+    backup_db();
     
     socket.emit("init", db);
 
@@ -47,4 +50,12 @@ function save_db() {
     fs.writeFile("db.json", JSON.stringify(db), function(err) {
         if (err) throw err;
     });
+}
+
+function backup_db() {
+    fs.writeFile("backups/db-"+n_backup+".json", JSON.stringify(db), function(err) {
+        if (err) throw err;
+    });
+    n_backup += 1;
+    fs.writeFileSync("backups/n.txt", n_backup);
 }

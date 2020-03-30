@@ -4,6 +4,7 @@
     height: 100%;
     text-align: center;
     outline-width: 0px;
+    padding: 0px !important;
 }
 
 tbody>tr>th {
@@ -12,4 +13,8 @@ tbody>tr>th {
 
 thead>tr>th {
     padding: 5px !important;
+}
+
+.dark {
+    background-color: lightgray;
 }

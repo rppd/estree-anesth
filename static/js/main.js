@@ -1,18 +1,24 @@
 var socket = io();
 
 socket.on("update", function(data) {
-    $("#"+data.cell).val(data.value);
+    document.getElementById(data.cell).value = data.value;
 });
 
 socket.on("init", function(db) {
     console.log(db)
     var keys = Object.keys(db);
     keys.forEach(function(key) {
-        $("#"+key).val(db[key])
+        element = document.getElementById(key)
+        if (element != undefined) {
+            element.value = db[key];
+        }
     });
 });
 
-$("input").change(function(event) {
-    console.log(event.target.value);
-    socket.emit("edit", {cell : event.target.id, value : event.target.value})
+document.querySelectorAll("input").forEach(function(input) {
+    console.log(input);
+    input.oninput = function(event) {
+        console.log(event.target.value);
+        socket.emit("edit", {cell : event.target.id, value : event.target.value});
+    }
 });
